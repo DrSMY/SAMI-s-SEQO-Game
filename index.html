@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SEQO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&family=Lexend+Deca:wght@800&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --transition-speed: 0.3s;
+        font-family: 'Poppins', sans-serif;
+      }
+      
+      .logo-title {
+        font-family: 'Lexend Deca', sans-serif;
+      }
+      
+      /* --- Player Theme Definitions --- */
+      :root, [data-player-theme="0"] { --accent-primary-base: #A259FF; --accent-primary-glow: rgba(162, 89, 255, 0.3); } /* Player 1: Fuchsia-ish */
+      [data-player-theme="1"] { --accent-primary-base: #38bdf8; --accent-primary-glow: rgba(56, 189, 248, 0.3); } /* Player 2: Sky */
+      [data-player-theme="2"] { --accent-primary-base: #34d399; --accent-primary-glow: rgba(52, 211, 153, 0.3); } /* Player 3: Emerald */
+      [data-player-theme="3"] { --accent-primary-base: #fbbf24; --accent-primary-glow: rgba(251, 191, 36, 0.3); } /* Player 4: Amber */
+
+
+      [data-theme="light"] {
+        --bg-color: #FFFFFF;
+        --card-bg-color: #F5F6FA;
+        --text-primary: #222222;
+        --text-secondary: #444444;
+        --accent-primary: var(--accent-primary-base);
+        --accent-secondary: #44E1B8;
+        --card-border: rgba(0,0,0,0.08);
+        --glass-bg: rgba(255, 255, 255, 0.5);
+        --glass-border-start: #ffffff;
+        --glass-border-end: rgba(255,255,255, 0.2);
+        --bg-glow-opacity: 0.25;
+      }
+      
+      [data-theme="dark"] {
+        --bg-color: #0B0C10;
+        --card-bg-color: #161B22;
+        --text-primary: #FFFFFF;
+        --text-secondary: #EAEAEA;
+        --accent-primary: var(--accent-primary-base);
+        --accent-secondary: #44E1B8;
+        --card-border: rgba(255,255,255,0.1);
+        --glass-bg: rgba(255, 255, 255, 0.05);
+        --glass-border-start: #ffffff;
+        --glass-border-end: rgba(255,255,255, 0.2);
+        --bg-glow-opacity: 0.15;
+      }
+
+      body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background-color: var(--bg-color);
+        color: var(--text-primary);
+        transition: background-color var(--transition-speed), color var(--transition-speed);
+        position: relative;
+        z-index: 1;
+      }
+
+      body::before {
+        content: '';
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: radial-gradient(circle at 15% 25%, var(--accent-primary), transparent 40%),
+                    radial-gradient(circle at 85% 75%, var(--accent-secondary), transparent 40%);
+        filter: blur(120px);
+        opacity: var(--bg-glow-opacity);
+        z-index: -1;
+        animation: background-pan 25s linear infinite alternate;
+        transition: opacity var(--transition-speed), background var(--transition-speed);
+      }
+
+      @keyframes background-pan {
+        from { transform: translate(-10%, -10%) scale(1); }
+        to { transform: translate(10%, 10%) scale(1.2); }
+      }
+
+      @keyframes fade-up-out {
+        0% { opacity: 1; transform: translateY(0); }
+        100% { opacity: 0; transform: translateY(-20px); }
+      }
+      .animate-fade-up-out { animation: fade-up-out 1.5s ease-out forwards; }
+      
+      @keyframes fade-in-out-turn {
+        0% { opacity: 0; transform: scale(0.95); }
+        20% { opacity: 1; transform: scale(1); }
+        80% { opacity: 1; transform: scale(1); }
+        100% { opacity: 0; transform: scale(0.95); }
+      }
+      .animate-fade-in-out-turn { animation: fade-in-out-turn 2.5s ease-in-out forwards; }
+
+
+      @keyframes pop {
+        50% { transform: scale(1.25); }
+      }
+      .animate-pop { animation: pop 0.3s ease-in-out; }
+
+      @keyframes pulse-red {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+        50% { box-shadow: 0 0 10px 5px rgba(239, 68, 68, 0); }
+      }
+      .animate-pulse-red { animation: pulse-red 1.5s infinite; }
+
+      @keyframes fade-in-up {
+        from { opacity: 0; transform: translateY(10px) scale(0.9); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+      }
+    </style>
+    <script>
+      // Prevents FOUC (Flash of Unstyled Content)
+      (function() {
+        const theme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (theme === 'dark' || (!theme && prefersDark)) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+        // Set default player theme
+        document.documentElement.setAttribute('data-player-theme', '0');
+      })();
+    </script>
+    <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/"
+  }
+}
+</script>
+</head>
+  <body class="text-[var(--text-primary)]">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
